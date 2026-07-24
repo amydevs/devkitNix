@@ -50,6 +50,12 @@
             cp -r opt $out/opt
             ln -sf $out/opt/devkitpro/tools/bin $out/bin
             rm $out/opt/devkitpro/pacman/share/pacman/keyrings
+
+            find "$out/opt/devkitpro" -type f -name '*pkg-config' | while read -r wrapper; do
+              substituteInPlace "$wrapper" \
+                --replace 'export PKG_CONFIG_SYSROOT_DIR=' \
+                          "export PKG_CONFIG_SYSROOT_DIR=$out"
+            done
           '';
 
           passthru = rec {
